@@ -23,7 +23,6 @@ jobs:
           - dependencies: >
               bandit
               libatomic
-              monkeytype
               pylint
               python3-dbus
               python3-dbus-signature-pyparsing

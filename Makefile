@@ -1,21 +1,11 @@
-ifeq ($(origin MONKEYTYPE), undefined)
-  PYTHON = python3
-else
-  PYTHON = MONKEYTYPE_TRACE_MODULES=into_dbus_python monkeytype run
-endif
-
-ISORT_MODULES = monkeytype_config.py setup.py src tests
-
-MONKEYTYPE_MODULES = into_dbus_python._signature
+ISORT_MODULES = setup.py src tests
 
 .PHONY: lint
 lint:
 	pylint setup.py
-	pylint monkeytype_config.py
 	pylint src/into_dbus_python
 	pylint tests
 	bandit setup.py
-	bandit monkeytype_config.py
 	# Ignore B101 errors. We do not distribute optimized code, i.e., .pyo
 	# files in Fedora, so we do not need to have concerns that assertions
 	# are removed by optimization.
@@ -25,7 +15,7 @@ lint:
 
 .PHONY: test
 test:
-	${PYTHON} -m unittest discover --verbose tests
+	python3 -m unittest discover --verbose tests
 
 .PHONY: coverage
 coverage:
@@ -54,13 +44,3 @@ yamllint:
 .PHONY: package
 package:
 	(umask 0022; python -m build; python -m twine check --strict ./dist/*)
-
-.PHONY: apply
-apply:
-	@echo "Modules traced:"
-	@monkeytype list-modules
-	@echo
-	@echo "Annotating:"
-	@for module in ${MONKEYTYPE_MODULES}; do \
-	  monkeytype --verbose apply  --sample-count --ignore-existing-annotations $${module} > /dev/null; \
-	done
