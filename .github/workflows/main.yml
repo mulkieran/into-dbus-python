@@ -21,12 +21,12 @@ jobs:
           - dependencies: yamllint
             task: make -f Makefile yamllint
           - dependencies: >
-              bandit
               libatomic
               pylint
               python3-dbus
               python3-dbus-signature-pyparsing
               python3-hypothesis
+              python3-setuptools
             task: >
               PATH=${PATH}:/github/home/.local/bin
               PYTHONPATH=./src make -f Makefile lint
