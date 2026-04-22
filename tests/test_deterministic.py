@@ -66,7 +66,7 @@ class ParseTestCase(unittest.TestCase):
             dbus.Array([dbus.Boolean(False)], signature="b", variant_level=2),
         )
         self.assertEqual(
-            xformer("av")([([("v", ("b", False))])])[0],
+            xformer("av")([[("v", ("b", False))]])[0],
             dbus.Array([dbus.Boolean(False, variant_level=2)], signature="v"),
         )
         self.assertEqual(
