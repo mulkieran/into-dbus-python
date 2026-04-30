@@ -15,15 +15,12 @@
 Transforming Python basic types to Python dbus types.
 """
 
-# isort: STDLIB
 import functools
 from collections.abc import Sequence
 from typing import Any, Callable, List, Tuple, Union
 
-# isort: THIRDPARTY
 import dbus
 
-# isort: FIRSTPARTY
 from dbus_signature_pyparsing import Parser
 
 from ._errors import (
@@ -78,8 +75,6 @@ class _ToDbusXformer(Parser):
     the type can not be inferred from the contents of the value.
     """
 
-    # pylint: disable=too-few-public-methods
-
     def _handle_variant(self) -> Tuple[Callable, str]:
         """
         Generate the correct function for a variant signature.
@@ -123,7 +118,7 @@ class _ToDbusXformer(Parser):
         :rtype: ((or list dict) -> ((or Array Dictionary) * int)) * str
         """
 
-        if len(toks) == 5 and toks[1] == "{" and toks[4] == "}":
+        if len(toks) == 5 and toks[1] == "{" and toks[4] == "}":  # noqa: PLR2004
             subtree = toks[2:4]
             signature = "".join(s for (_, s) in subtree)
             [key_func, value_func] = [f for (f, _) in subtree]
@@ -146,7 +141,7 @@ class _ToDbusXformer(Parser):
 
             return (the_dict_func, "a{" + signature + "}")
 
-        if len(toks) == 2:
+        if len(toks) == 2:  # noqa: PLR2004
             (func, sig) = toks[1]
 
             def the_array_func(a_list: Sequence[Any], *, variant=0):
